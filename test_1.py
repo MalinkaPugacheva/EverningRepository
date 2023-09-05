@@ -1,40 +1,31 @@
 import yaml
-import time
-from BaseApp import BasePage
-from testpage import Operations
+from module import Site
 
 with open("testdata.yaml") as f:
     testdata = yaml.safe_load(f)
 
-name = testdata["username"]
-passwd = testdata["password"]
+site = Site(testdata["address"])
 
 
-def test_step1(err_401, browser):
-    site = BasePage(browser)
-    site.go_to_site()
-    page = Operations(browser)
-    page.enter_bad_login()
-    page.enter_bad_pass()
-    page.click_login_button()
-    assert page.get_error_text() == err_401
+def test_step1():
+    x_selector1 = """//*[@id="login"]/div[1]/label/input"""
+    input1 = site.find_element("xpath", x_selector1)
+    input1.send_keys("test")
+    x_selector2 = """//*[@id="login"]/div[2]/label/input"""
+    input2 = site.find_element("xpath", x_selector2)
+    input2.send_keys("test")
+    btn_selector = "button"
+    btn = site.find_element("css", btn_selector)
+    btn.click()
+    x_selector3 = """//*[@id="app"]/main/div/div/div[2]/h2"""
+    err_label = site.find_element("xpath", x_selector3)
+    assert err_label.text == "401"
 
 
-def test_step2(hello_user, browser, alert_text):
-    site = BasePage(browser)
-    site.go_to_site()
-    page = Operations(browser)
-    page.enter_good_login()
-    page.enter_good_pass()
-    page.click_login_button()
-    # SendMail()
-    assert page.get_hello_user() == hello_user
-    page.click_contact_button()
-    time.sleep(3)
-    page.enter_name()
-    page.enter_email()
-    page.enter_content()
-    time.sleep(3)
-    page.click_contact_us_button()
-    time.sleep(3)
-    assert page.alert() == alert_text
+test_step1()
+
+# css_selector = "span.mdc-text-field__ripple"
+# print(site.get_element_property("css", css_selector, "height"))
+#
+# xpath = '//*[@id="login"]/div[3]/button/div'
+# print(site.get_element_property("xpath", xpath, "color"))
