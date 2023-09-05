@@ -1,0 +1,9 @@
+address: https://test-stand.gb.ru
+sleep_time: 1
+browser: firefox
+username: niko2101
+password: 87c2463fae
+bad_login: test
+name: Nikolay Eremeev
+email: test@mail.ru
+content: Test information
